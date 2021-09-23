@@ -195,3 +195,84 @@ console.log(jQuery("#root"))
 // 2. 枚举类型如何使用
 
 
+/* interface VS type */
+// 1. 公共：定义object， class function
+interface Student {
+  name: string;
+  age: number;
+}
+const xiaoming: Student = {
+  name: 'xiaownagming',
+  age: 18
+}
+
+class StudentClass implements Student {
+  name: string;
+  age: number;
+  constructor (name: string, age: number) {
+    this.name = name
+    this.age = age
+  }
+}
+
+interface PersonEatBehavior {
+  (food: string): string
+}
+
+// 可以看出使用interface定义的函数参数没有限制
+// 定义的函数类型接口对参数问题： 传了参数才会根据类型中的形参进行约束，不传没有约束，限制必传参数校验失效
+const eatMe: PersonEatBehavior = () => {
+  return 'string'
+}
+const eat: PersonEatBehavior = (name: string) => {
+  return 'food'
+}
+
+// 2. 特别： extends， 相同的接口声明会自动合并
+interface Animal {
+  name: string;
+  age: number;
+}
+interface Animal {
+  height: number
+}
+
+const dog: Animal = {
+  name: 'haha',
+  age: 2,
+  height: 20,
+}
+
+interface Man {
+  name: string;
+  age: number;
+}
+
+interface SuperMan extends Man {
+  fly: boolean;
+}
+
+const bird: SuperMan = {
+  name: "bird",
+  age: 1,
+  fly: true
+}
+
+
+// 3. 定义类型别名，不能继承，是一个固定的形状【主要用于别名的操作】
+type DogBaseFeature = {
+  name: string;
+}
+type DogSpecialFeature = {
+  color: string;
+}
+type Dog = DogBaseFeature | DogSpecialFeature // 或的关系
+// type Dog = DogBaseFeature & DogSpecialFeature // 且的关系，相当于合并两个类型成为一个
+const myDog: Dog = {
+  name: "xiaohuang",
+  color: "red"
+}
+
+// 4. 特别： 使用 & 符号进行type合并，or运算【｜】interface 和type都可以使用
+
+// 5. interface 与type直接的转化
