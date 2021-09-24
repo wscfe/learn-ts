@@ -274,5 +274,121 @@ const myDog: Dog = {
 }
 
 // 4. 特别： 使用 & 符号进行type合并，or运算【｜】interface 和type都可以使用
+// type largeSize = {
+//   name: string;
+// }
 
-// 5. interface 与type直接的转化
+// type smallSize = {
+//   age: number
+// }
+
+// // type size = largeSize | smallSize
+// type size = largeSize & smallSize
+// const mySize: size = {
+//   name: '121',
+//   age: 18
+// }
+
+interface largeSize {
+  name: string;
+}
+
+interface smallSize {
+  age: number
+}
+
+type TType = {
+  height: number
+}
+
+// 可以看到class类不仅可以实现interface，也可以实现type类型
+class MyClass implements TType {
+  height: number
+  constructor (height: number) {
+    this.height = height
+  }
+}
+
+// 可以看到接口可以继承type
+interface size extends largeSize, smallSize, TType {} // 接口可以使用extends去继承其他的接口
+type size2 = largeSize & smallSize // 接口也可以使用 &符号去合并两个接口，并使用一个类型别名
+type size3 = largeSize | smallSize // 接口也可以使用 ｜ 符号
+
+// 可以看出interface比较灵活
+let mySize: size = {
+  name: '123',
+  age: 18,
+  height: 90,
+}
+
+
+/* 内置对象 */
+// 1. ECMAAcript对象
+const b: Boolean = new Boolean(10)
+
+const  e: Error = new Error("Error occurred")
+
+const d: Date = new Date()
+
+const r: RegExp = new RegExp(/[a-z]/)
+
+
+// 2. DOM和BOM对象
+const body: HTMLElement = document.body
+
+const allDiv: NodeList = document.querySelectorAll('div')
+
+document.addEventListener('click', (e: MouseEvent) => {
+  // do something
+  console.log(e.target)
+})
+
+
+/* 类型别名 */
+// 1. 使用type创建类型别名， 类型别名常用于联合类型
+//  比如我定义了许多接口，但是有些场景是需要一些接口的组合比如说使用 ｜ & 等符号来对不同的接口的组合适应不同使用场景
+// 类型别名也可以针对其他的类型做动态组合
+// 类型别名不能继承，只能组合，想要继承只能通过定义新的类型去组合其他的类型别名实现继承的效果
+type Name = string// 给string类型定义一个Name的别名 // 看着像定义变量，其实不是，在ts编译之后会自动删除
+type NameResolver = () => string // 给一个函数定义了一个类型别名
+type NameOrNameResolver = Name | NameResolver // 给上面两种类型做组合
+
+const getName2: (value: NameOrNameResolver) => Name = (n: NameOrNameResolver) => {
+  if (typeof n === 'string') {
+    return n;
+  } else {
+    return n()
+  }
+}
+
+
+/* 字符串字面量类型 */
+// 1. 字符串字面量类型用来约束取值只能是某几个字符串中的一个
+type EventNames = 'click' | 'scroll' | 'mousemove'
+// 类型别名和字符串字面量类型都是使用type进行定义
+
+/* 元组 */
+// 1. 元组为固定长度，超出范围的元素不能保证其类型【根据元组元素的所有类型的联合类型处理】
+const Tom: [string, number] = ['tom', 23]
+
+Tom[0].slice(1)
+Tom![1].toFixed(2) // TS中！表示前一个变量不能为空【null/undefied】
+
+// 2. 越界元素，越界元素的类型会被限制为元组中每个类型的联合类型
+
+const jack: [string, number] = ['name', 18]
+
+// jack.push(true) // 报错： type 'boolean' is not assignable to parameter of type 'string | number'
+
+
+
+/* 枚举类型 */
+// 枚举成员会被赋值为从0开始递增的数字，同时也会对枚举值到枚举名进行反向映射
+
+// 1. 基础使用
+
+
+// 2. 手动赋值
+
+
+// 3. 
