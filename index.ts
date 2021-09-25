@@ -482,3 +482,129 @@ const point3d: Point3D = {
   y: 10,
   z: 10
 }
+
+
+/* 泛型 */
+// 泛型【generics】是指在定义函数，接口，类的时候，不预先指定具体的类型，而是在使用的时候在指定一种类型的特性
+
+// 1. 基础使用
+const createArray = (length: number, value: any): any[] => {
+  const array: any[] = [];
+  for (let i = 0; i < length; ++i) {
+    array[i] = value
+  }
+  return array
+}
+// console.log(createArray(5, 'xxx'))
+
+// 注意泛型 T 在尖头函数中位置和普通函数中位置是不一样的
+// 普通函数在 泛型T 是在function关键字后面即可， 箭头函数的 T 泛型在尖头函数括号的首部哦
+const createArrayWithGenerics: ICreateArrayWithGenerics = <T>(length: number, value: T): T[] => {
+  const array: T[] = []
+  for(let i = 0; i < length; ++i) {
+    array[i] = value
+  }
+  return array
+}
+// console.log(createArrayWithGenerics(3, '100'))
+
+const obj: ICreateArrayWithGenerics2<string> = {
+  createArray: <T>(length: number, value: T): T[] => {
+    const array: T[] = []
+    for(let i = 0; i < length; ++i) {
+      array[i] = value
+    }
+    return array
+  }
+}
+console.log(obj.createArray(3, '100'))
+
+
+// 2. 多个类型泛型参数
+// 定义泛型的时候，可以一次性定义多个参数
+const swapWithGenerics = <T, U>(tuple: [T, U]): [U, T] => {
+  return [tuple[1], tuple[0]]
+}
+// 调用定义了泛型的函数时候，函数名称后面需要加上指定的泛型确定类型， 如果不指定TS会自动推算泛型的具体类型
+console.log(swapWithGenerics<string, number>(['gogog', 9999]))
+
+
+// 3. 泛型约束
+interface IConstraint {
+  length: number;
+}
+const genericsConstraint = <T extends IConstraint>(value: T): void => {
+  console.log(value.length)
+}
+// console.log(genericsConstraint([1,2,3,4]))
+
+// 多个类型参数之间也可以相互进行约束
+const copyFieldsWithGenericsConstraint = <T extends U, U>(target: T, source: U) => {
+  for (let id in source) {
+    // target[id] = (source as T)[id]
+    target[id] = (<T>source)[id]
+  }
+}
+
+// 4. 泛型接口
+
+// 使用接口的形式定一个一个函数需要符合的形状
+// 可以使用含有泛型的接口来定义函数的形状
+interface ICreateArrayWithGenerics {
+  <T>(length: number, value: T): T[] 
+}
+
+// 可以泛型参数提前到接口名称上面， 【这样的话整个接口里面都可以使用这个泛型参数了】不提出来的话只能在当前函数中使用
+interface ICreateArrayWithGenerics2<T> {
+  createArray: (length: number, value: T) => T[]
+}
+
+
+// 5. 泛型类
+// 与泛型接口类似，泛型也可以用于类的类型定义中
+class GenericsClass<T> {
+  public constructor(public leftValue: T, public rightValue: T) {
+  }
+
+  addValue(): T {
+    return this.leftValue || this.rightValue
+  }
+}
+
+console.log(new GenericsClass<number>(0, 9999).addValue())
+
+
+// 6. 泛型参数的默认类型
+// 当使用泛型的时候没有在代码中直接指定类型参数的时候，从实际参数中也无法推测出类型的时候，这个默认类型就会起作用
+const createArrayWithDefaultGenerics = <T = string>(length: number, value: T): T[] => {
+  const array: T[] = []
+  for (let i = 0; i < length; ++i) {
+    array[i] = value
+  }
+  return array
+}
+
+// 不过大部分情况都是可以根据用户传入参数推断出泛型参数的实际类型，然后进行使用，此时我们的默认泛型参数也就没啥用了，
+// 因此使用场景并不是很多
+
+
+/* type类型 & ｜ 符号的使用 */
+type T = {
+  name: string
+}
+
+type U = {
+  age: number
+}
+
+type M1 = T & U // 将两个类型进行合并操作, 生成的类型每个都必须符合条件
+const testValue1: M1 = {
+  name: 'tst',
+  age: 18
+}
+
+type M = T | U; // 将两个类型合并操作，与上面不同的是生成的类型只需要满足一个类型即可
+const testValue: M = {
+  name: 'aaa',
+  age: 10
+}
