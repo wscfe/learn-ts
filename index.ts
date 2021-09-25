@@ -225,7 +225,7 @@ const eatMe: PersonEatBehavior = () => {
   return 'string'
 }
 const eat: PersonEatBehavior = (name: string) => {
-  return 'food'
+  return name
 }
 
 // 2. 特别： extends， 相同的接口声明会自动合并
@@ -386,9 +386,27 @@ const jack: [string, number] = ['name', 18]
 // 枚举成员会被赋值为从0开始递增的数字，同时也会对枚举值到枚举名进行反向映射
 
 // 1. 基础使用
-
+enum Days {
+  Sun,
+  Mon,
+  Tue,
+  Wed,
+  Thu,
+  Fri,
+  Sat,
+}
+// console.log(Days)
+// console.log(Days['Fri']) // 枚举支持正向获取值
+// console.log(Days[1]) // 枚举支持反向获取key的值
 
 // 2. 手动赋值
+// 没有给枚举手动赋值，会从0开始，也可以指定某一个枚举进行赋值，后面的枚举选项会自动根据前面设置的值继续进行累加
+enum Days2 {
+  Mon,
+  Tue = 20,
+  Wed,
+  Thu,
+}
+console.log(Days2)
 
 
-// 3. 
