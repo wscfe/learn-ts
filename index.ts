@@ -588,7 +588,31 @@ const createArrayWithDefaultGenerics = <T = string>(length: number, value: T): T
 // 因此使用场景并不是很多
 
 
-/* type类型 & ｜ 符号的使用 */
+/* 声明合并，包括type和interface的类型和接口的合并 */
+// 1. 函数的合并 【通过重载】
+
+
+// 2. 接口的合并
+interface Alarm3 {
+  name: string;
+  // alert(name: string): string
+}
+interface Alarm3 {
+  age: number;
+  name: string;
+  // alert(age: number): number
+}
+
+// 上面两个同名的接口会自动进行合并
+const alarm: Alarm3 = {
+  name: 'name',
+  age: 20,
+}
+
+
+
+// 3. 类型type的合并 type类型 & ｜ 符号的使用
+// type类型不能拥有相同的名字和接口不一样
 type T = {
   name: string
 }
