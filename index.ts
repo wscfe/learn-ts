@@ -410,3 +410,75 @@ enum Days2 {
 console.log(Days2)
 
 
+/* 类与接口 */
+// 一般来说，一个类只能继承自另一个类，一个类可以实现多个接口
+// 有时候，不同的类直接可以有一些共有的特性，这个时候就可以把这些共有的特性提取出来成为一个interface【接口】
+// 类使用implements关键字来实现。
+
+
+// 1. 类实现接口
+interface Alarm {
+  alert(): void
+}
+
+class Door {}
+
+class SecurityDoor extends Door implements Alarm { // 当前类继承了一个实现Alarm接口的类
+  alert() {
+    console.log('这是一个拥有报警的安全门')
+  }
+}
+new SecurityDoor().alert()
+
+// 一个类可以实现多个接口
+interface Light {
+  lightOn(): void;
+  lightOff(): void;
+}
+
+class Car implements Alarm, Light { // 一个类只能继承一个类，但是可以实现多个接口
+  alert(){
+    console.log('this is my car')
+  }
+  lightOn() {
+    console.log('打开车灯')
+  }
+  lightOff() {
+    console.log('关闭车灯')
+  }
+}
+
+
+// 2. 接口继承接口
+// 接口与接口直接是可以继承的，而且一个接口可以继承多个其他的接口
+interface LightableAlarm extends Alarm, Light {
+  name: string
+}
+
+
+// 3. 接口继承类
+// 正常的面向对象【OOP】的语言中，接口是不能继承类的，但是在TS中确实可以的
+// 为什么呢？ 因为在TS中接口继承类，实际上继承的还是接口，哈哈
+
+class Point {
+  public constructor(public x: number, public y: number){}
+}
+
+interface PonitInstanceType { // 接口继承类的时候等价继承这个接口
+  x: number;
+  y: number;
+}
+
+// 当我们在声明一个class Point的时候，TS除了会创建一个名为Point的类之外，
+// 还会创建一个名为Point的实例类型（实例的类型）
+// 这个Point的实例类型不包括构造函数，静态属性和静态方法
+// 也就是说声明Point类时创建的Point类型只包含其中的实例属性和实例方法
+interface Point3D extends Point {
+  z: number
+}
+
+const point3d: Point3D = {
+  x: 10,
+  y: 10,
+  z: 10
+}
