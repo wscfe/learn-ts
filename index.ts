@@ -632,3 +632,19 @@ const testValue: M = {
   name: 'aaa',
   age: 10
 }
+
+
+type Mytype = {
+  name: string
+}
+
+type Mytype2 = {
+  name?: string
+}
+
+// 使用 &符号 可以看出使两个type类型去最小公共交集，得出的结果就是name属性是一个必选的属性
+type Mytype3 = Mytype & Mytype2
+const myObj: Mytype3 = {
+  name: 'name'
+}
+
