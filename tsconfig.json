@@ -1,5 +1,5 @@
 {
-  "include":["index.ts", "class.ts"],
+  "include":["index.ts", "class.ts", "advance.ts"],
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig.json to read more about this file */
 
@@ -28,7 +28,7 @@
     /* Strict Type-Checking Options */
     "strict": true,                           /* Enable all strict type-checking options. */
     // "noImplicitAny": true,                 /* Raise error on expressions and declarations with an implied 'any' type. 注意不是使用any类型报错，而是不加上类型才会报错 */
-    // "strictNullChecks": true,              /* Enable strict null checks. */
+    "strictNullChecks": true,              /* Enable strict null checks. */
     // "strictFunctionTypes": true,           /* Enable strict checking of function types. */
     // "strictBindCallApply": true,           /* Enable strict 'bind', 'call', and 'apply' methods on functions. */
     // "strictPropertyInitialization": true,  /* Enable strict checking of property initialization in classes. */

@@ -2,7 +2,7 @@
  * @Author: wangshicheng
  * @Date: 2021-09-26 23:10:32
  * @Description: TS高阶使用学习
- * @FilePath: /learn-ts/advance.ts
+ * @FilePath: /ts-expression/advance.ts
  */
 
 /* Partial<Type>: 可选 */
@@ -49,17 +49,17 @@ type MyRequired<T> = {
   [P in keyof T]-?: T[P] // -? 的作用就是清楚可选性的用于实现required
 }
 
-interface Person2 {
-  name?: string;
-  age?: number
-}
+// interface Person2 {
+//   name?: string;
+//   age?: number
+// }
 
 type required = MyRequired<Person2>
 
-const person2: required = {
-  name: 'name',
-  age: 18
-}
+// const person2: required = {
+//   name: 'name',
+//   age: 18
+// }
 
 // 如果只是想将T类型中的某一些属性转化为必选的，应该怎么做
 interface Props {
@@ -175,4 +175,122 @@ const person10: MyReadonly<Person> = {
   age: 18
 }
 
+interface ITest {
+  name: string
+  age: string
+}
+
 // person10.age = 20;    // 无法分配到 "age" ，因为它是只读属性。ts(2540)
+
+
+type keys = 'GET' | 'POST'
+type TKeys = {
+  [K in keys]: string // keyof可以产生联合类型， in则可以遍历枚举类型
+}
+let lolo: TKeys = {
+  'GET': 'strign',
+  'POST': 'strign'
+}
+
+// 将一个类型的所有属性变成只读属性类型
+type MyReadonly2<T> = {
+  readonly[P in keyof T]: T[P]
+}
+
+// 将一个属性的所有的只读属性删除，变成可以修改的属性
+type MyMutable<T> = {
+  -readonly[P in keyof T]: T[P]
+}
+
+type readonlyValue = {
+  name: string,
+  readonly age: number
+}
+
+type aaa = MyReadonly2<readonlyValue>
+type bbb = MyMutable<readonlyValue>
+
+
+// keyof any 返回的类型是基本类型number string symbol的集合
+type myAny = keyof any // number | string | symbol
+
+
+// 注意keyof针对联合类型进行操作的时候，取的是联合类型属性中共有的属性和方法
+type lala = number | string | symbol
+type Tlala = keyof lala //  "toString" | "valueOf"
+
+/* exclude */
+// T extends U ? X : Y
+// 上述条件类型表示： 如果T是U的子类型，那么就会返回 X ，否则返回 Y
+// 若T泛型是一个联合类型，则其会进行自动分发条件，
+// 例如： T extends U ? X : Y, T可能是 （A ｜ B）的联合类型，
+// 实际情况就是 （A extends U ？ X ： Y）｜ （A extends U ？X ： Y）
+type typeName<T> = 
+  T extends string ? string :
+  T extends number ? number :
+  T extends boolean ? boolean :
+  T extends undefined ? undefined :
+  T extends Function ? Function :
+  Object
+
+const a: typeName<string | number> = 'name'
+
+// 从T泛型中排除U
+type MyExclude2<T, U> = T extends U ? never : T
+
+
+
+/* extract */
+//从泛型T中提取U
+type MyExtact2<T, U> = T extends U ? T : never
+
+
+// 当你指定了--strictNullChecks标记，null和undefined只能赋值给void和它们各自
+
+
+
+let anyValue: any = '1'
+// let str: never = anyValue // Type 'any' is not assignable to type 'never'
+
+
+// void类型的变量只能被undefined和null进行赋值，使用上没有什么太大的意义
+let voidValue: void = undefined
+// let voidValue: void = null
+
+/* 类型断言的两种使用方式 */
+// 1. 尖括号语法
+let someValue2: any = "this is a any or unknow"
+
+let strValue2: number = (<string>someValue2).length
+
+
+// 2. as语法
+let someValue: any = "this is a any or unknow"
+
+let strValue: number = (someValue as string).length
+
+
+// ReadonlyArray的使用
+let arrq0: ReadonlyArray<number> = [1,2,3]
+type myreadonlyArray<T> = {
+  readonly[index: number]: T
+}
+
+// arrq0[0] = 0 // Index signature in type 'readonly number[]' only permits reading
+console.log(arrq0[0])
+
+
+
+
+interface Named {
+  name: string
+}
+
+let x: Named;
+let y = { name: 'name', age: 10 }
+
+// x 要兼容 y， 那么y至少具有与x相同的属性
+// y有个额外的age属性，但是这不会引发错误， 只有目标类型的成员会被一一检查是否兼容
+x = y
+
+console.log('x', x)
