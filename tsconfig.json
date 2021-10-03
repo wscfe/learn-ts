@@ -1,5 +1,5 @@
 {
-  "include":["index.ts", "class.ts", "advance.ts", "easy-challenge"],
+  "include":["index.ts", "class.ts", "advance.ts", "easy-challenge", "medium-challenge.ts"],
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig.json to read more about this file */
 
